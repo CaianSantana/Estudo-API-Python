@@ -15,4 +15,10 @@ def create_app():
 
     app.register_blueprint(usuario_route)
 
+    @app.cli.command("init-db")
+    def init_db_command():
+        with app.app_context():
+            db.create_all()
+        print("Banco de dados inicializado!")
+
     return app

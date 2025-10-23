@@ -26,4 +26,10 @@ EXPOSE 5000
 
 WORKDIR /app
 
-CMD ["flask", "--app", "api:create_app", "run", "--host=0.0.0.0"]
+ENV FLASK_APP="api:create_app"
+
+COPY ./entrypoint.sh /app/entrypoint.sh
+
+RUN chmod +x /app/entrypoint.sh
+
+CMD ["/app/entrypoint.sh"]
