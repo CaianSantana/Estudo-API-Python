@@ -33,6 +33,6 @@ jobs:
       - name: Build and push
         uses: docker/build-push-action@v6
         with:
-          context: ./Flask
+          context: ./flask
           push: true
           tags: ${{ vars.DOCKERHUB_USERNAME }}/flask-api:latest
