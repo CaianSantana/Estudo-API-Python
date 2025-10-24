@@ -47,56 +47,33 @@ resource "aws_iam_role" "ecr_role" {
 }
 
 resource "aws_iam_role_policy" "ecr_app_permission" {
-  name = "ecr_app_permission"
+  name = "github-ecr-push-permission"
   role = aws_iam_role.ecr_role.id
 
   policy = jsonencode({
     Version = "2012-10-17"
     Statement = [
       {
-        "Sid" : "Statement1",
+        "Sid" : "AllowECRAuth",
         "Effect" : "Allow",
-        "Action" : [
-          "apprunner:*"
-        ],
+        "Action" : "ecr:GetAuthorizationToken",
         "Resource" : "*"
       },
       {
-        "Sid" : "Statement2",
+        "Sid" : "AllowECRPush",
         "Effect" : "Allow",
         "Action" : [
-          "iam:PassRole",
-          "iam:CreateServiceLinkedRole",
-        ],
-        "Resource" : "*"
-      },
-      {
-        "Sid" : "Statement3",
-        "Effect" : "Allow",
-        "Action" : [
-          "ecr:GetAuthorizationToken",
           "ecr:BatchCheckLayerAvailability",
-          "ecr:GetDownloadUrlForLayer",
-          "ecr:GetRepositoryPolicy",
-          "ecr:DescribeRepositories",
-          "ecr:ListImages",
-          "ecr:DescribeImages",
-          "ecr:BatchGetImage",
-          "ecr:GetLifecyclePolicy",
-          "ecr:GetLifecyclePolicyPreview",
-          "ecr:ListTagsForResource",
-          "ecr:DescribeImageScanFindings",
-          "ecr:InitiateLayerUpload",
-          "ecr:UploadLayerPart",
           "ecr:CompleteLayerUpload",
-          "ecr:PutImage"
+          "ecr:InitiateLayerUpload",
+          "ecr:PutImage",
+          "ecr:UploadLayerPart"
         ],
         "Resource" : "*"
-      },
+      }
     ]
   })
 }
-
 resource "aws_iam_role" "apprunner_role" {
   name = "apprunner_role"
 
@@ -107,7 +84,7 @@ resource "aws_iam_role" "apprunner_role" {
         "Effect" : "Allow",
         "Action" : "sts:AssumeRole",
         "Principal" : {
-          "Federated" : "build.apprunner.amazonaws.com"
+          "Federated" : "tasks.apprunner.amazonaws.com"
         }
       }
     ]
