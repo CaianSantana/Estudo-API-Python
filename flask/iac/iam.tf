@@ -78,3 +78,32 @@ resource "aws_iam_role_policy" "ecr_app_permission" {
     ]
   })
 }
+
+resource "aws_iam_role" "apprunner_role" {
+  name = "apprunner_role"
+
+  assume_role_policy = jsonencode({
+    "Version" : "2012-10-17",
+    "Statement" : [
+      {
+        "Effect" : "Allow",
+        "Action" : "sts:AssumeRole",
+        "Principal" : {
+          "Federated" : "build.apprunner.amazonaws.com"
+        }
+      }
+    ]
+  })
+  tags = {
+    IaC = true
+  }
+}
+
+resource "aws_iam_role_policy_attachment" "ec2ro-attach" {
+  role       = aws_iam_role.apprunner_role.name
+  policy_arn = "arn:aws:iam::aws:policy/AmazonEC2ContainerRegistryReadOnly"
+}
+
+
+
+
