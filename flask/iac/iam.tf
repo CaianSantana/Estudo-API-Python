@@ -54,6 +54,24 @@ resource "aws_iam_role_policy" "ecr_app_permission" {
     Version = "2012-10-17"
     Statement = [
       {
+        "Sid" : "Statement1",
+        "Effect" : "Allow",
+        "Action" : [
+          "apprunner:*"
+        ],
+        "Resource" : "*"
+      },
+      {
+        "Sid" : "Statement2",
+        "Effect" : "Allow",
+        "Action" : [
+          "iam:PassRole",
+          "iam:CreateServiceLinkedRole",
+        ],
+        "Resource" : "*"
+      },
+      {
+        "Sid" : "Statement3",
         "Effect" : "Allow",
         "Action" : [
           "ecr:GetAuthorizationToken",
