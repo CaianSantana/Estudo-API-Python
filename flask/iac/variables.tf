@@ -17,7 +17,13 @@ variable "api_name" {
 }
 
 variable "api_port" {
-  default     = ""
+  default     = 8080
   type        = number
   description = "Porta da APi"
+}
+
+variable "container_name" {
+  default     = ""
+  type        = string
+  description = "Nome do container"
 }
