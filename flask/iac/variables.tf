@@ -9,3 +9,9 @@ variable "aws_region" {
   type        = string
   description = "Região da AWS"
 }
+
+variable "api_name" {
+  default     = ""
+  type        = string
+  description = "Nome da APi"
+}
