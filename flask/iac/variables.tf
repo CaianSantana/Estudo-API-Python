@@ -15,3 +15,9 @@ variable "api_name" {
   type        = string
   description = "Nome da APi"
 }
+
+variable "api_port" {
+  default     = ""
+  type        = number
+  description = "Porta da APi"
+}
