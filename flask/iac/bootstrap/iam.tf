@@ -18,14 +18,14 @@ resource "aws_iam_role" "tf-role" {
       {
         Action = "sts:AssumeRoleWithWebIdentity"
         Condition = {
-          StringEquals = {
+          StringLike = {
             "token.actions.githubusercontent.com:aud" = "${var.oidc_client}"
-            "token.actions.githubusercontent.com:sub" = "repo:caiansantana/Estudo-API-Python:ref:refs/heads/main"
+            "token.actions.githubusercontent.com:sub" = "repo:caiansantana/Estudo-API-Python:*"
           }
         }
         Effect = "Allow"
         Principal = {
-          Federated = "arn:aws:iam::403429280851:oidc-provider/${var.oidc_provider}"
+          Federated = "arn:aws:iam::009160076203:oidc-provider/${var.oidc_provider}"
         }
       }
     ]
