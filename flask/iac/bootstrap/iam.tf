@@ -10,6 +10,32 @@ resource "aws_iam_openid_connect_provider" "oidc-git" {
   }
 }
 
+resource "aws_iam_role" "tf-role" {
+  name = "tf-role"
+
+  assume_role_policy = jsonencode({
+    Statement = [
+      {
+        Action = "sts:AssumeRoleWithWebIdentity"
+        Condition = {
+          StringEquals = {
+            "token.actions.githubusercontent.com:aud" = "${var.oidc_client}"
+            "token.actions.githubusercontent.com:sub" = "repo:caiansantana/Estudo-API-Python:ref:refs/heads/main"
+          }
+        }
+        Effect = "Allow"
+        Principal = {
+          Federated = "arn:aws:iam::403429280851:oidc-provider/${var.oidc_provider}"
+        }
+      }
+    ]
+    Version = "2012-10-17"
+  })
+  tags = {
+    IAC = "True"
+  }
+}
+
 resource "aws_iam_role" "ecr_role" {
   name = "ecr_role"
 
@@ -89,6 +115,33 @@ resource "aws_iam_role" "apprunner_role" {
   tags = {
     IaC = true
   }
+}
+resource "aws_iam_role_policy" "tf_app_permission" {
+  name = "github-tf-push-permission"
+  role = aws_iam_role.tf-role.id
+
+  policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [{
+        Sid      = "Statement1"
+        Action   = "ecr:*"
+        Effect   = "Allow"
+        Resource = "*"
+        },
+        {
+          Sid      = "Statement2"
+          Action   = "iam:*"
+          Effect   = "Allow"
+          Resource = "*"
+        },
+        {
+          Sid      = "Statement3"
+          Action   = "s3:*"
+          Effect   = "Allow"
+          Resource = "*"
+        }
+      ]
+  })
 }
 
 resource "aws_iam_role_policy_attachment" "ec2ro-attach" {

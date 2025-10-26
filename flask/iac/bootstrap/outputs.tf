@@ -9,3 +9,8 @@ output "ecr_url" {
 output "ecr_role" {
   value = aws_iam_role.ecr_role.arn
 }
+
+output "tf_role" {
+  value = aws_iam_role.tf-role.arn
+}
+
