@@ -2,9 +2,9 @@ resource "aws_s3_bucket" "tfstate_bucket" {
   bucket        = "${var.api_name}-tfstate-bucket"
   force_destroy = true
 
-  lifecycle {
-    prevent_destroy = true
-  }
+  # lifecycle {
+  #   prevent_destroy = true
+  # }
 
   tags = {
     IaC = true

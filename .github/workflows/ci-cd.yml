@@ -37,6 +37,10 @@ jobs:
         run: |
           docker build -t $REPOSITORY_URL:$IMAGE_TAG .
           docker push $REPOSITORY_URL:$IMAGE_TAG
+<<<<<<< HEAD
+=======
+          # Expõe a tag da imagem para os próximos passos
+>>>>>>> 9f093d3a11e2ab5c69b30f85f300034591c65d09
           echo "image_tag=$IMAGE_TAG" >> $GITHUB_OUTPUT
 
       - name: Setup terraform
