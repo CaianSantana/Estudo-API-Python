@@ -30,7 +30,6 @@ resource "aws_iam_role" "ecr_role" {
           },
           "StringLike" : {
             "${var.oidc_provider}:sub" : [
-              "repo:caiansantana/Estudo-API-Python:ref:refs/heads/main",
               "repo:caiansantana/Estudo-API-Python:ref:refs/heads/main"
             ]
           }
