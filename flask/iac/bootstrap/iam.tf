@@ -1,11 +1,11 @@
 resource "aws_iam_openid_connect_provider" "oidc-git" {
-  url = "https://token.actions.githubusercontent.com"
+  url = "https://${var.oidc_provider}"
 
   client_id_list = [
-    "sts.amazonaws.com",
+    var.oidc_client,
   ]
 
-  thumbprint_list = ["7560D6F40FA55195F740EE2B1B7C0B4836CBE103"]
+  thumbprint_list = [var.thumbprint]
 
   tags = {
     IaC = true
@@ -22,16 +22,16 @@ resource "aws_iam_role" "ecr_role" {
         "Effect" : "Allow",
         "Action" : "sts:AssumeRoleWithWebIdentity",
         "Principal" : {
-          "Federated" : "arn:aws:iam::009160076203:oidc-provider/token.actions.githubusercontent.com"
+          "Federated" : "arn:aws:iam::009160076203:oidc-provider/${var.oidc_provider}"
         },
         "Condition" : {
           "StringEquals" : {
-            "token.actions.githubusercontent.com:aud" : [
-              "sts.amazonaws.com"
+            "${var.oidc_provider}:aud" : [
+              "${var.oidc_client}"
             ]
           },
           "StringLike" : {
-            "token.actions.githubusercontent.com:sub" : [
+            "${var.oidc_provider}:sub" : [
               "repo:caiansantana/Estudo-API-Python:ref:refs/heads/main",
               "repo:caiansantana/Estudo-API-Python:ref:refs/heads/main"
             ]

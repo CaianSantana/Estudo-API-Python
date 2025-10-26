@@ -16,3 +16,21 @@ variable "api_name" {
   description = "Nome da APi"
 }
 
+variable "oidc_provider" {
+  default     = ""
+  type        = string
+  description = "URL do provedor OIDC"
+}
+
+variable "oidc_client" {
+  default     = ""
+  type        = string
+  description = "URL do client OIDC"
+}
+
+variable "thumbprint" {
+  default     = ""
+  type        = string
+  description = "Thumbprint do provedor OIDC"
+}
+
