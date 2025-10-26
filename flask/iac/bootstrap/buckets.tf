@@ -1,14 +1,5 @@
-terraform {
-  backend "s3" {
-    bucket  = "flask-tfstate-bucket"
-    key     = "terraform.tfstate"
-    encrypt = true
-    region  = "us-west-2"
-  }
-}
-
 resource "aws_s3_bucket" "tfstate_bucket" {
-  bucket        = "flask-tfstate-bucket"
+  bucket        = "${var.api_name}-tfstate-bucket"
   force_destroy = true
 
   lifecycle {

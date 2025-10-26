@@ -21,9 +21,3 @@ variable "api_port" {
   type        = number
   description = "Porta da APi"
 }
-
-variable "container_name" {
-  default     = ""
-  type        = string
-  description = "Nome do container"
-}
