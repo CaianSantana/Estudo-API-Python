@@ -1,0 +1,81 @@
+name: CI-CD
+
+on:
+  push:
+    branches:
+    - main
+
+permissions:
+  contents: write
+  id-token: write
+  issues: write
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout do código
+        uses: actions/checkout@v5
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ secrets.ECR_ROLE }}
+          aws-region: ${{ secrets.AWS_REGION }}
+
+      - name: Login to Amazon ECR
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@v2
+
+      - name: Build, tag, and push docker image to Amazon ECR
+        id: build-image 
+        env:
+          REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+          REPOSITORY_URL: ${{ vars.ECR_REPOSITORY_URL }}
+          IMAGE_TAG: ${{ github.sha }}
+        run: |
+          docker build -t $REPOSITORY_URL:$IMAGE_TAG .
+          docker push $REPOSITORY_URL:$IMAGE_TAG
+          echo "image_tag=$IMAGE_TAG" >> $GITHUB_OUTPUT
+
+      - name: Setup terraform
+        uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: "1.13.3"
+
+      - name: Run terraform init
+        run: terraform init \
+              -backend-config="bucket=${{ vars.BUCKET_TFSTATE }}" \
+              -backend-config="key=main-app/terraform.tfstate" \
+              -backend-config="region=${{ secrets.AWS_REGION }}"
+        working-directory: iac/main 
+
+      - name: Check fmt terraform
+        run: terraform fmt -check
+        working-directory: iac/main
+
+      - name: Run terraform plan
+        env:
+          TF_VAR_db_name: ${{ vars.DB_NAME }}
+          TF_VAR_db_user: ${{ secrets.DB_USER }}
+          TF_VAR_db_pass: ${{ secrets.DB_PASS }}
+          TF_VAR_api_name: ${{ vars.API_NAME }}
+          TF_VAR_api_port: ${{ vars.API_PORT }}
+          TF_VAR_ecr_url: ${{ vars.ECR_REPOSITORY_URL }}
+          TF_VAR_app_image_tag: ${{ steps.build-image.outputs.image_tag }}
+        run: terraform plan
+        working-directory: iac/main
+
+      - name: Run terraform apply
+        env:
+          TF_VAR_db_name: ${{ vars.DB_NAME }}
+          TF_VAR_db_user: ${{ secrets.DB_USER }}
+          TF_VAR_db_pass: ${{ secrets.DB_PASS }}
+          TF_VAR_api_name: ${{ vars.API_NAME }}
+          TF_VAR_api_port: ${{ vars.API_PORT }}
+          TF_VAR_ecr_url: ${{ vars.ECR_REPOSITORY_URL }}
+          TF_VAR_app_image_tag: ${{ steps.build-image.outputs.image_tag }}
+          
+        run: terraform apply -auto-approve
+        working-directory: iac/main

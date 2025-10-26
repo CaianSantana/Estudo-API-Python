@@ -27,10 +27,3 @@ variable "oidc_client" {
   type        = string
   description = "URL do client OIDC"
 }
-
-variable "thumbprint" {
-  default     = ""
-  type        = string
-  description = "Thumbprint do provedor OIDC"
-}
-

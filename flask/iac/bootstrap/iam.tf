@@ -5,8 +5,6 @@ resource "aws_iam_openid_connect_provider" "oidc-git" {
     var.oidc_client,
   ]
 
-  thumbprint_list = [var.thumbprint]
-
   tags = {
     IaC = true
   }
