@@ -50,14 +50,9 @@ resource "aws_iam_role" "ecr_role" {
         },
         "Condition" : {
           "StringEquals" : {
-            "${var.oidc_provider}:aud" : [
-              "${var.oidc_client}"
-            ]
-          },
-          "StringLike" : {
-            "${var.oidc_provider}:sub" : [
-              "repo:caiansantana/Estudo-API-Python:ref:refs/heads/main"
-            ]
+            "${var.oidc_provider}:aud" : "${var.oidc_client}",
+            
+            "${var.oidc_provider}:sub" : "repo:caiansantana/Estudo-API-Python:ref:refs/heads/main"
           }
         }
       }
