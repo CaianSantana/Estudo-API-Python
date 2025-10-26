@@ -1,53 +1,32 @@
 variable "vpc_cidr_range" {
-  description = "Range da VPC"
-  type = string
-  default = "10.10.0.0/16"
+  description = "Bloco CIDR para a VPC"
+  type        = string
 }
 
 variable "vpc_tenancy" {
-  description = "Locatário da rede"
-  type = string
-  default = "default"
-}
-
-variable "vpc_tags" {
-  description = "Tags da VPC"
-  type = map(string)
-  default = {}
+  description = "Tenancy da VPC"
+  type        = string
+  default     = "default"
 }
 
 variable "vpc_subnet_cidr_range" {
-  description = "Range da Sub-rede"
-  type = string
-  default = "10.10.1.0/24"
+  description = "Lista de blocos CIDR para as subnets"
+  type        = list(string)
 }
 
-variable "vpc_subnet_availability_zone" {
-  description = "Zona de disponibilidade da Sub-rede"
-  type = string
-  default = "us-west-2a"
+variable "vpc_subnet_availability_zones" {
+  description = "Lista de Zonas de Disponibilidade para as subnets"
+  type        = list(string)
+}
+
+variable "vpc_tags" {
+  description = "Tags para a VPC"
+  type        = map(string)
+  default     = {}
 }
 
 variable "vpc_subnet_tags" {
-  description = "Tags da Sub-rede"
-  type = map(string)
-  default = {}
-}
-
-variable "vpc_sg_name" {
-  description = "Nome do Grupo de Segurança"
-  type = string
-  default = "allow-ssh"
-}
-
-variable "vpc_sg_desc" {
-  description = "Descrição do Grupo de Segurança"
-  type = string
-  default = "Permite SSH"
-}
-
-variable "vpc_sg_tags" {
-  description = "Tags do Grupo de Segurança"
-  type = map(string)
-  default = {}
+  description = "Tags para as Subnets"
+  type        = map(string)
+  default     = {}
 }
