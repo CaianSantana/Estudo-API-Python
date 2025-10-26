@@ -1,7 +1,7 @@
 resource "aws_apprunner_vpc_connector" "app_connector" {
   vpc_connector_name = "${var.api_name}-vpc-connector"
-  subnets = module.vpc.subnet_ids
-  security_groups = [aws_security_group.app_sg.id]
+  subnets            = module.vpc.subnet_ids
+  security_groups    = [aws_security_group.app_sg.id]
 
   tags = {
     IaC = true
