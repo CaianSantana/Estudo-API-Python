@@ -37,7 +37,7 @@ jobs:
           docker build -t $REPOSITORY_URL:$IMAGE_TAG .
           docker push $REPOSITORY_URL:$IMAGE_TAG
           echo "image_tag=$IMAGE_TAG" >> $GITHUB_OUTPUT
-        working-directory: flask/api
+        working-directory: flask/
 
       - name: Setup terraform
         uses: hashicorp/setup-terraform@v3
