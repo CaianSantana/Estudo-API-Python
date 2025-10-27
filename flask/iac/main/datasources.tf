@@ -1,5 +1,5 @@
 data "aws_iam_role" "apprunner_role" {
-  name = "apprunner_role"
+  name = "apprunner_service_role"
 }
 
 data "aws_availability_zones" "available" {
