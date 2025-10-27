@@ -45,10 +45,11 @@ jobs:
           terraform_version: "1.13.3" 
 
       - name: Run terraform init
-        run: terraform init \
-              -backend-config="bucket=${{ vars.BUCKET_TFSTATE }}" \
-              -backend-config="key=main-app/terraform.tfstate" \
-              -backend-config="region=${{ secrets.AWS_REGION }}"
+        run: |
+            terraform init \
+            -backend-config="bucket=${{ vars.BUCKET_TFSTATE }}" \
+            -backend-config="key=main-app/terraform.tfstate" \
+            -backend-config="region=${{ secrets.AWS_REGION }}"
         working-directory: flask/iac/main 
 
       - name: Check fmt terraform
