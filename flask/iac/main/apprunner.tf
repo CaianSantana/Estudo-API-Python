@@ -19,16 +19,16 @@ resource "aws_apprunner_service" "apprunner_service" {
           DATABASE_URI = "mysql+mysqlconnector://${var.db_user}:${var.db_pass}@${aws_db_instance.db.address}/${var.db_name}"
         }
       }
-      
+
       image_identifier      = "${var.ecr_url}:${var.app_image_tag}"
       image_repository_type = "ECR"
     }
-    
+
     auto_deployments_enabled = true
     authentication_configuration {
       access_role_arn = data.aws_iam_role.apprunner_role.arn
     }
-    
+
   }
 
   network_configuration {
@@ -38,7 +38,7 @@ resource "aws_apprunner_service" "apprunner_service" {
     }
   }
 
-  
+
   tags = {
     Name = "${var.api_name}-apprunner-service"
     IaC  = true
