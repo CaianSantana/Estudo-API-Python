@@ -37,6 +37,7 @@ jobs:
           docker build -t $REPOSITORY_URL:$IMAGE_TAG .
           docker push $REPOSITORY_URL:$IMAGE_TAG
           echo "image_tag=$IMAGE_TAG" >> $GITHUB_OUTPUT
+        working-directory: flask/api
 
       - name: Setup terraform
         uses: hashicorp/setup-terraform@v3
@@ -48,11 +49,11 @@ jobs:
               -backend-config="bucket=${{ vars.BUCKET_TFSTATE }}" \
               -backend-config="key=main-app/terraform.tfstate" \
               -backend-config="region=${{ secrets.AWS_REGION }}"
-        working-directory: iac/main 
+        working-directory: flask/iac/main 
 
       - name: Check fmt terraform
         run: terraform fmt -check
-        working-directory: iac/main
+        working-directory: flask/iac/main
 
       - name: Run terraform apply
         env:
@@ -64,4 +65,4 @@ jobs:
           TF_VAR_ecr_url: ${{ vars.ECR_REPOSITORY_URL }}
           TF_VAR_app_image_tag: ${{ steps.build-image.outputs.image_tag }}
         run: terraform apply -auto-approve
-        working-directory: iac/main
+        working-directory: flask/iac/main
