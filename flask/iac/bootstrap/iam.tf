@@ -12,6 +12,21 @@ resource "aws_iam_role" "github_actions_role" {
   name = "github-actions-pipeline-role"
 
   assume_role_policy = jsonencode({
+  # "Version": "2012-10-17",
+  # "Statement": [
+	# {
+  # 	"Effect": "Allow",
+  # 	"Principal": {
+  #   	"Federated": "arn:aws:iam::009160076203:oidc-provider/token.actions.githubusercontent.com"
+  # 	},
+  # 	"Action": "sts:AssumeRoleWithWebIdentity",
+  # 	"Condition": {
+  #   	"StringEquals": {
+  #     	"token.actions.githubusercontent.com:sub": "repo:CaianSantana/Estudo-API-Python:ref:refs/heads/main"
+  #   	}
+  # 	}
+	# }
+  # ]
     "Version" : "2012-10-17",
     "Statement" : [
       {
@@ -25,7 +40,7 @@ resource "aws_iam_role" "github_actions_role" {
             "${var.oidc_provider}:aud" : var.oidc_client
           },
           "StringLike" : {
-            "${var.oidc_provider}:sub" : "repo:caiansantana/Estudo-API-Python:*"
+            "${var.oidc_provider}:sub" : "repo:CaianSantana/Estudo-API-Python:*"
           }
         }
       }
